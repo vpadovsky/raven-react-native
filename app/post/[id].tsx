@@ -1,8 +1,9 @@
-import { View, ScrollView, StyleSheet } from 'react-native';
+import { ScrollView, StyleSheet } from 'react-native';
 import { Text, TouchableOpacity } from 'react-native';
 import { useQuery } from '@tanstack/react-query';
 import { useLocalSearchParams, Link } from 'expo-router';
 import { fetchPost, fetchComments, fetchUser } from '../services/api';
+import Comment from "@/app/components/Comment";
 
 export default function PostScreen() {
     const { id } = useLocalSearchParams();
@@ -38,14 +39,10 @@ export default function PostScreen() {
                 </Link>
             )}
             <Text style={styles.body}>{post.body}</Text>
-
             <Text style={styles.commentsTitle}>Comments:</Text>
-            {comments?.map((comment) => (
-                <View key={comment.id} style={styles.comment}>
-                    <Text style={styles.commentEmail}>{comment.email}</Text>
-                    <Text>{comment.body}</Text>
-                </View>
-            ))}
+            {comments?.map((comment) => {
+                return <Comment {...comment}/>
+            })}
         </ScrollView>
     );
 }
@@ -53,35 +50,33 @@ export default function PostScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 16,
-        backgroundColor: '#fff'
+        padding: 20,
+        backgroundColor: '#f8f9fa'
     },
     title: {
-        fontSize: 24,
+        fontSize: 28,
         fontWeight: 'bold',
-        marginBottom: 8
+        marginBottom: 12,
+        color: '#2c3e50',
+        letterSpacing: 0.5
     },
     author: {
-        color: 'blue',
-        marginBottom: 16
+        fontSize: 16,
+        color: '#3498db',
+        marginBottom: 20,
+        textDecorationLine: 'underline'
     },
     body: {
-        fontSize: 16,
-        marginBottom: 24
+        fontSize: 17,
+        lineHeight: 24,
+        color: '#34495e',
+        marginBottom: 32
     },
     commentsTitle: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        marginBottom: 16
+        fontSize: 22,
+        fontWeight: '600',
+        marginBottom: 20,
+        color: '#2c3e50',
+        letterSpacing: 0.3
     },
-    comment: {
-        padding: 12,
-        marginBottom: 12,
-        backgroundColor: '#f5f5f5',
-        borderRadius: 8
-    },
-    commentEmail: {
-        fontWeight: 'bold',
-        marginBottom: 4
-    }
 });

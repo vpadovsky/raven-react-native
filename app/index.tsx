@@ -45,23 +45,37 @@ export default function PostsScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 16,
-        backgroundColor: '#fff'
+        padding: 20,
+        backgroundColor: '#f8f9fa'
     },
     title: {
-        fontSize: 24,
+        fontSize: 28,
         fontWeight: 'bold',
-        marginBottom: 16
+        marginBottom: 24,
+        color: '#1a1a1a',
+        letterSpacing: 0.5
     },
     postCard: {
-        padding: 16,
+        padding: 18,
         marginBottom: 16,
-        borderRadius: 8,
-        backgroundColor: '#f5f5f5'
+        borderRadius: 12,
+        backgroundColor: '#ffffff',
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        elevation: 3,
+        borderWidth: 1,
+        borderColor: '#eaeaea'
     },
     postTitle: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        marginBottom: 8
+        fontSize: 20,
+        fontWeight: '600',
+        marginBottom: 10,
+        color: '#2c3e50',
+        lineHeight: 24
     }
 });

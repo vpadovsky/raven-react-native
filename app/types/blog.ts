@@ -1,11 +1,11 @@
-export interface Post {
+export interface IPost {
     userId: number;
     id: number;
     title: string;
     body: string;
 }
 
-export interface Comment {
+export interface IComment {
     postId: number;
     id: number;
     name: string;
@@ -13,7 +13,7 @@ export interface Comment {
     body: string;
 }
 
-export interface User {
+export interface IUser {
     id: number;
     name: string;
     username: string;
