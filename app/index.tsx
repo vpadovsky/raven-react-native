@@ -1,10 +1,10 @@
 import { View, FlatList, StyleSheet } from 'react-native';
 import { Text, TouchableOpacity } from 'react-native';
-import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { fetchPosts } from './services/api';
 import { Link } from 'expo-router';
-
-const queryClient = new QueryClient();
+import Header from './components/Header';
+import { capitalizeText } from "@/app/utils/text";
 
 function PostsList() {
     const { data: posts, isLoading, error } = useQuery({
@@ -12,20 +12,31 @@ function PostsList() {
         queryFn: fetchPosts
     });
 
-    if (isLoading) return <Text>Loading...</Text>;
-    if (error) return <Text>Error loading posts</Text>;
+    if (isLoading) return (
+        <View style={styles.container}>
+            <Header title="Blog Posts" showBack={false} />
+            <Text>Loading...</Text>
+        </View>
+    );
+    if (error) return (
+        <View style={styles.container}>
+            <Header title="Blog Posts" showBack={false} />
+            <Text>Error loading posts</Text>
+        </View>
+    );
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Blog Posts</Text>
+            <Header title="Blog Posts" showBack={false} />
             <FlatList
+                style={styles.content}
                 data={posts}
                 keyExtractor={(item) => item.id.toString()}
                 renderItem={({ item }) => (
                     <Link href={`/post/${item.id}`} asChild>
                         <TouchableOpacity style={styles.postCard}>
-                            <Text style={styles.postTitle}>{item.title}</Text>
-                            <Text numberOfLines={2}>{item.body}</Text>
+                            <Text style={styles.postTitle}>{capitalizeText(item.title)}</Text>
+                            <Text numberOfLines={2}>{capitalizeText(item.body)}</Text>
                         </TouchableOpacity>
                     </Link>
                 )}
@@ -35,18 +46,17 @@ function PostsList() {
 }
 
 export default function PostsScreen() {
-    return (
-        <QueryClientProvider client={queryClient}>
-            <PostsList />
-        </QueryClientProvider>
-    );
+    return <PostsList />;
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 20,
         backgroundColor: '#f8f9fa'
+    },
+    content: {
+        flex: 1,
+        padding: 20,
     },
     title: {
         fontSize: 28,

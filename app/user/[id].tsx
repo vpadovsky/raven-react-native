@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useLocalSearchParams, Link } from 'expo-router';
 import { fetchUserPosts, fetchUser } from '../services/api';
 import { IPost, IUser } from "@/app/types/blog";
+import { capitalizeText } from '../utils/text';
 
 export default function UserPostsScreen() {
     const { id } = useLocalSearchParams();
@@ -24,15 +25,15 @@ export default function UserPostsScreen() {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Posts by {user.name}</Text>
+            <Text style={styles.title}>Posts by {capitalizeText(user.name)}</Text>
             <FlatList
                 data={posts}
                 keyExtractor={(item) => item.id.toString()}
                 renderItem={({ item }) => (
                     <Link href={`/post/${item.id}`} asChild>
                         <TouchableOpacity style={styles.postCard}>
-                            <Text style={styles.postTitle}>{item.title}</Text>
-                            <Text numberOfLines={2}>{item.body}</Text>
+                            <Text style={styles.postTitle}>{capitalizeText(item.title)}</Text>
+                            <Text numberOfLines={2}>{capitalizeText(item.body)}</Text>
                         </TouchableOpacity>
                     </Link>
                 )}

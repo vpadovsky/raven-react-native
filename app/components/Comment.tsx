@@ -1,12 +1,13 @@
 import { StyleSheet, Text, View } from "react-native";
 import { IComment } from "../types/blog";
+import { capitalizeText } from "@/app/utils/text";
 
 export default function Comment(comment: IComment) {
     const {email, body} = comment;
     return (
         <View style={styles.comment}>
             <Text style={styles.commentEmail}>{email}</Text>
-            <Text>{body}</Text>
+            <Text>{capitalizeText(body)}</Text>
         </View>
     )
 }

@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useLocalSearchParams, Link } from 'expo-router';
 import { fetchPost, fetchComments, fetchUser } from '../services/api';
 import Comment from "@/app/components/Comment";
+import { capitalizeText } from "@/app/utils/text";
 
 export default function PostScreen() {
     const { id } = useLocalSearchParams();
@@ -30,7 +31,7 @@ export default function PostScreen() {
 
     return (
         <ScrollView style={styles.container}>
-            <Text style={styles.title}>{post.title}</Text>
+            <Text style={styles.title}>{capitalizeText(post.title)}</Text>
             {user && (
                 <Link href={`/user/${user.id}`} asChild>
                     <TouchableOpacity>
@@ -38,7 +39,7 @@ export default function PostScreen() {
                     </TouchableOpacity>
                 </Link>
             )}
-            <Text style={styles.body}>{post.body}</Text>
+            <Text style={styles.body}>{capitalizeText(post.body)}</Text>
             <Text style={styles.commentsTitle}>Comments:</Text>
             {comments?.map((comment) => {
                 return <Comment {...comment}/>
