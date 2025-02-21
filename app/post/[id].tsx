@@ -42,7 +42,7 @@ export default function PostScreen() {
             <Text style={styles.body}>{capitalizeText(post.body)}</Text>
             <Text style={styles.commentsTitle}>Comments:</Text>
             {comments?.map((comment) => {
-                return <Comment {...comment}/>
+                return <Comment {...comment} key={comment.id}/>
             })}
         </ScrollView>
     );

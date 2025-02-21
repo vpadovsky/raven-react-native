@@ -1,15 +1,26 @@
 import { View, FlatList, StyleSheet } from 'react-native';
 import { Text, TouchableOpacity } from 'react-native';
-import { useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import { fetchPosts } from './services/api';
 import { Link } from 'expo-router';
 import Header from './components/Header';
 import { capitalizeText } from "@/app/utils/text";
 
 function PostsList() {
-    const { data: posts, isLoading, error } = useQuery({
+    const {
+        data,
+        error,
+        isLoading,
+        fetchNextPage,
+        hasNextPage,
+        isFetchingNextPage
+    } = useInfiniteQuery({
         queryKey: ['posts'],
-        queryFn: fetchPosts
+        queryFn: ({ pageParam = 1 }) => fetchPosts({ pageParam }),
+        getNextPageParam: (lastPage, pages) => {
+            // If last page returns the limit, assume more pages exist.
+            return lastPage.length === 10 ? pages.length + 1 : undefined;
+        }
     });
 
     if (isLoading) return (
@@ -24,6 +35,9 @@ function PostsList() {
             <Text>Error loading posts</Text>
         </View>
     );
+
+    // Combine all pages into one array of posts.
+    const posts = data?.pages.flat() || [];
 
     return (
         <View style={styles.container}>
@@ -40,6 +54,15 @@ function PostsList() {
                         </TouchableOpacity>
                     </Link>
                 )}
+                onEndReached={() => {
+                    if (hasNextPage && !isFetchingNextPage) {
+                        fetchNextPage();
+                    }
+                }}
+                onEndReachedThreshold={0.5}
+                ListFooterComponent={
+                    isFetchingNextPage ? <Text>Loading more...</Text> : null
+                }
             />
         </View>
     );
@@ -56,7 +79,7 @@ const styles = StyleSheet.create({
     },
     content: {
         flex: 1,
-        padding: 20,
+        padding: 20
     },
     title: {
         fontSize: 28,
@@ -73,7 +96,7 @@ const styles = StyleSheet.create({
         shadowColor: '#000',
         shadowOffset: {
             width: 0,
-            height: 2,
+            height: 2
         },
         shadowOpacity: 0.1,
         shadowRadius: 4,
